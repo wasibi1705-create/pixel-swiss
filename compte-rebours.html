@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Compte à Rebours</title>
+<style>
+  :root {
+    --main:#3498db;
+    --dark:#222;
+  }
+  body {
+    background:var(--dark);
+    color:white;
+    font-family:'Segoe UI',Roboto,Arial,sans-serif;
+    text-align:center;
+    margin:0;
+    padding:0;
+  }
+  header {
+    padding:20px;
+    font-size:2em;
+    background:var(--main);
+    box-shadow:0 4px 8px rgba(0,0,0,0.3);
+  }
+  #display {
+    font-size:12vw;
+    font-weight:bold;
+    letter-spacing:0.05em;
+    margin:50px 0 20px 0;
+    text-shadow:0 0 20px rgba(0,0,0,0.6);
+  }
+  .controls {
+    display:flex;
+    justify-content:center;
+    gap:15px;
+    margin-bottom:40px;
+    flex-wrap:wrap;
+  }
+  input[type=number]{
+    width:80px;
+    padding:10px;
+    border:none;
+    border-radius:8px;
+    font-size:1.2em;
+    text-align:center;
+    outline:none;
+  }
+  button {
+    padding:12px 25px;
+    font-size:1.2em;
+    border:none;
+    border-radius:8px;
+    background:var(--main);
+    color:white;
+    cursor:pointer;
+    transition:transform 0.1s,background 0.3s;
+  }
+  button:hover { background:#2980b9; }
+  button:active { transform:scale(0.95); }
+  footer {
+    font-size:0.9em;
+    opacity:0.6;
+    margin-top:30px;
+  }
+</style>
+</head>
+<body>
+<header>⏳ Compte à Rebours</header>
+
+<div id="display">00:00</div>
+
+<div class="controls">
+  <input type="number" id="minutes" placeholder="Minutes">
+  <input type="number" id="seconds" placeholder="Secondes">
+</div>
+
+<div class="controls">
+  <button onclick="startTimer()">▶ Démarrer</button>
+  <button onclick="pauseTimer()">⏸ Pause</button>
+  <button onclick="resetTimer()">🔄 Reset</button>
+</div>
+
+<footer>Made with ❤️ par toi</footer>
+
+<script>
+let total=0, interval, paused=true;
+
+function updateDisplay(){
+  let m=Math.floor(total/60), s=total%60;
+  document.getElementById("display").textContent =
+    String(m).padStart(2,'0')+":"+String(s).padStart(2,'0');
+}
+
+function startTimer(){
+  if(paused){
+    let min = parseInt(document.getElementById("minutes").value)||0;
+    let sec = parseInt(document.getElementById("seconds").value)||0;
+    if(total===0) total = min*60 + sec;
+    if(total<=0) return;
+    paused=false;
+    interval=setInterval(()=>{
+      if(!paused){
+        total--;
+        if(total<=0){
+          clearInterval(interval);
+          total=0;
+          updateDisplay();
+          alert("⏰ Temps écoulé !");
+          paused=true;
+          return;
+        }
+        updateDisplay();
+      }
+    },1000);
+  }
+}
+
+function pauseTimer(){ paused=!paused; }
+
+function resetTimer(){
+  clearInterval(interval);
+  paused=true;
+  total=0;
+  updateDisplay();
+}
+</script>
+</body>
+</html>
